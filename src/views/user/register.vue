@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     async register() {
-      if (/^1[3456789]\d{9}$/.test(this.user.username) || /^.{3,16}$/.test(this.user.password && this.user.nickname.length > 0)) {
+      if (/^1[3456789]\d{9}$/.test(this.user.username) || /^.{3,16}$/.test(this.user.password) && this.user.nickname.length > 0) {
         userRegister(this.user)
             .then((res) => {
               console.log(res)
