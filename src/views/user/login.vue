@@ -9,14 +9,24 @@
         没有账号？
         <a href="#/register" class="">去注册</a>
       </p>
-      <div class="button">登录按钮</div>
+      <my_button @click="login" type="success">
+        <span>登录</span>
+      </my_button>
     </div>
   </div>
 </template>
 
 <script>
+import my_button from "@/components/my_button";
+
 export default {
-  name: "login"
+  name: "login",
+  components: {my_button},
+  methods: {
+    login(e) {
+      console.log('login',e)
+    }
+  }
 }
 </script>
 
