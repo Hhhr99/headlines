@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    项目开始了
   </div>
 </template>
 
