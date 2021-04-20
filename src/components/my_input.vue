@@ -52,8 +52,8 @@ export default {
       if (this.rules) { // 判断是否传递了规则
         // 进行用户数据的校验
         if (!this.rules.test(value)) {
-          console.log(this.msg)
-          Button
+          this.$toast.fail(this.msg)
+          // console.log(this.msg)
         }
       }
     },

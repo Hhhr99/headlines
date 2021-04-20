@@ -38,17 +38,19 @@ export default {
   },
   methods: {
     login(e) {
-      if (/^1[3456789]\d{9}$/.test(this.user.username) && /^.{3,16}$/.test(this.user.password)) {
+      if (/^1[3456789]\d{9}$/.test(this.user.username) || /^.{3,16}$/.test(this.user.password)) {
         userLogin(this.user)
             .then((res) => {
               console.log(res)
               localStorage.setItem('token', res.data.data.token)
+              this.$toast.success('登录成功')
             })
             .catch((err) => {
               console.log(err)
+              this.$toast.fail('登录失败')
             })
       } else {
-        this.$toast('请输入正确的用户名和密码')
+        this.$toast.fail('请输入正确的用户名和密码')
       }
     }
   },
