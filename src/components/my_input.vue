@@ -27,10 +27,10 @@ export default {
   },
   methods: {
     handerInput(e) {
-      this.pn = 'class'
       let value = e.target.value
       // 校验用户输入是否合法
       if (this.rules) { // 判断是否传递了规则
+        this.pn = 'class'
         // 进行用户数据的校验
         if (this.rules.test(value)) {
           console.log('ok')

@@ -4,7 +4,6 @@
       <div class="close"><span class="iconfont iconicon-test"></span></div>
       <div class="logo"><span class="iconfont iconnew"></span></div>
       <div class="inputs">
-
         <my_input v-model="user.username" placeholder="请输入手机号" :rules="/^1[3456789]\d{9}$/" msg="请输入11位手机号"></my_input>
         <!--为子组件赋值有限给子组件的props属性，如果没有props属性，那么就会添加到组件的根元素-->
         <my_input v-model="user.password" placeholder="请输入密码" :rules="/^.{3,16}$/" msg="请输入3~16位密码"></my_input>

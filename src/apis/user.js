@@ -1,8 +1,7 @@
 // 这个文件专门添加与用户相关操作的api
 
-// 用户登录
 import axios from "@/utils/request";
-
+// 用户登录
 export const userLogin = (data) => {
     return axios({
         method: 'post',
@@ -10,6 +9,7 @@ export const userLogin = (data) => {
         data
     })
 }
+// 用户注册
 export const userRegister=(data)=>{
     return axios({
         method:'post',

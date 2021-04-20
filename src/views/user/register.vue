@@ -3,9 +3,11 @@
     <div class="close"><span class="iconfont iconicon-test"></span></div>
     <div class="logo"><span class="iconfont iconnew"></span></div>
     <div class="inputs">
-      <my_input v-model="user.username" placeholder="请输入手机号" :rules="/^1[3456789]\d{9}$/" msg="请输入11位手机号"></my_input>
+      <my_input placeholder="请输入手机号" :rules="/^1[3456789]\d{9}$/" msg="请输入11位手机号"
+                v-model.trim="user.username"></my_input>
       <!--为子组件赋值有限给子组件的props属性，如果没有props属性，那么就会添加到组件的根元素-->
-      <my_input v-model="user.password" placeholder="请输入密码" :rules="/^.{3,16}$/" msg="请输入3~16位密码"></my_input>
+      <my_input placeholder="请输入昵称" v-model="user.nickname"></my_input>
+      <my_input placeholder="请输入密码" :rules="/^.{3,16}$/" msg="请输入3~16位密码" v-model.trim="user.password"></my_input>
     </div>
     <p class="tips">
       有账号？
@@ -28,18 +30,28 @@ export default {
   components: {My_input, My_button},
   data() {
     return {
-      user:{
+      user: {
         username: '',
-        password: ''
+        password: '',
+        nickname: ''
       }
     }
   },
-  methods:{
+  methods: {
     async register() {
-      let res = await userRegister(this.user)
-      if (res.data.message === '注册成功') {
-        this.$toast.success(res.data.message)
-        this.$router.push({name: 'login'})
+      if (/^1[3456789]\d{9}$/.test(this.user.username) || /^.{3,16}$/.test(this.user.password && this.user.nickname.length > 0)) {
+        userRegister(this.user)
+            .then((res) => {
+              console.log(res)
+              if ((res.data.message === '注册成功')) {
+                this.$toast('注册成功')
+              } else {
+                this.$toast.fail('注册失败')
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
       }
     }
   }
