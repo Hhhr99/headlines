@@ -7,7 +7,7 @@
 
         <my_input v-model="user.username" placeholder="请输入手机号" :rules="/^1[3456789]\d{9}$/" msg="请输入11位手机号"></my_input>
         <!--为子组件赋值有限给子组件的props属性，如果没有props属性，那么就会添加到组件的根元素-->
-        <my_input v-model="user.password" placeholder="请输入密码" :rules="/^.{8,16}$/" msg="请输入8~16位密码" ></my_input>
+        <my_input v-model="user.password" placeholder="请输入密码" :rules="/^.{3,16}$/" msg="请输入3~16位密码"></my_input>
       </div>
       <p class="tips">
         没有账号？
@@ -23,6 +23,7 @@
 <script>
 import my_button from "@/components/my_button";
 import my_input from "@/components/my_input";
+import {userLogin} from "@/apis/user";
 
 export default {
   name: "login",
@@ -37,9 +38,20 @@ export default {
   },
   methods: {
     login(e) {
-      console.log(this.user)
-    },
-  }
+      if (/^1[3456789]\d{9}$/.test(this.user.username) && /^.{3,16}$/.test(this.user.password)) {
+        userLogin(this.user)
+            .then((res) => {
+              console.log(res)
+              localStorage.setItem('token', res.data.data.token)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+      } else {
+        this.$toast('请输入正确的用户名和密码')
+      }
+    }
+  },
 }
 </script>
 

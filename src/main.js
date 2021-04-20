@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import { Button } from 'vant'
+import 'vant/lib/index.css'
 Vue.use(Button);
 
 import reset from './styles/reset.less'
