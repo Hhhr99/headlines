@@ -3,14 +3,18 @@
     <div class="container">
       <div class="close"><span class="iconfont iconicon-test"></span></div>
       <div class="logo"><span class="iconfont iconnew"></span></div>
-      <div class="inputs"><input placeholder="请输入手机号" class="input"><input placeholder="密码" class="input"
-                                                                           type="password"></div>
+      <div class="inputs">
+
+        <my_input v-model="user.username" placeholder="请输入手机号" :rules="/^1[3456789]\d{9}$/" msg="请输入11位手机号"></my_input>
+        <!--为子组件赋值有限给子组件的props属性，如果没有props属性，那么就会添加到组件的根元素-->
+        <my_input v-model="user.password" placeholder="请输入密码" :rules="/^.{8,16}$/" msg="请输入8~16位密码" ></my_input>
+      </div>
       <p class="tips">
         没有账号？
         <a href="#/register" class="">去注册</a>
       </p>
       <my_button @click="login" type="success">
-        <span>登录</span>
+        登录
       </my_button>
     </div>
   </div>
@@ -18,14 +22,23 @@
 
 <script>
 import my_button from "@/components/my_button";
+import my_input from "@/components/my_input";
 
 export default {
   name: "login",
-  components: {my_button},
+  components: {my_button, my_input},
+  data() {
+    return {
+      user: {
+        username: '',
+        password: ''
+      }
+    }
+  },
   methods: {
     login(e) {
-      console.log('login',e)
-    }
+      console.log(this.user)
+    },
   }
 }
 </script>
