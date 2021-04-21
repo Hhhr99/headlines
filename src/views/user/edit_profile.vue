@@ -12,7 +12,10 @@
       <img :src="userinfo.head_img" alt="">
       <van-uploader :after-read="afterRead"/>
     </div>
-    <my_cell title="昵称" :desc="userinfo.nickname"></my_cell>
+    <my_cell title="昵称" :desc="userinfo.nickname" @click.native="showNicknameDialog"></my_cell>
+    <van-dialog v-model="nickshow" title="编辑昵称" show-cancel-button @confirm="editNickname">
+      <van-field v-model="nickname" label="昵称" placeholder="请输入用户名"/>
+    </van-dialog>
     <my_cell title="密码" :desc="userinfo.password"></my_cell>
     <my_cell title="性别" :desc="userinfo.gender===1?'男':'女'"></my_cell>
   </div>
@@ -31,7 +34,10 @@ export default {
   data() {
     return {
       userinfo: {},
-      id: ''
+      id: '',
+      nickshow: false,
+      // 昵称所对应的变量
+      nickname: ''
     }
   },
   components: {my_cell, my_header},
@@ -61,6 +67,24 @@ export default {
             console.log(err)
           })
     },
+    // 昵称
+    showNicknameDialog() {
+      this.nickshow = !this.nickshow
+      this.nickname = this.userinfo.nickname
+    },
+    editNickname() {
+      uploadUserInfo(this.$route.params.id, {nickname: this.nickname})
+          .then(res => {
+            console.log(res)
+            if (res.data.message === '修改成功') {
+              this.$toast.success('修改成功')
+              this.userinfo.nickname = this.nickname
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    }
   },
   mounted() {
     // console.log(this.$route.params.id)

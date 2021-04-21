@@ -5,11 +5,14 @@ import App from './App.vue'
 import reset from './styles/reset.less'
 import router from './router/index'
 
-import {Toast, Icon, Uploader} from "vant";
+import {Toast, Icon, Uploader, Dialog, ActionSheet,Field } from "vant";
 
 Vue.use(Toast)
     .use(Icon)
-    .use(Uploader);
+    .use(Uploader)
+    .use(Dialog)
+    .use(ActionSheet)
+    .use(Field )
 
 Vue.config.productionTip = false
 

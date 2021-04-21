@@ -45,7 +45,7 @@ export default {
     this.id = id
     getUserDetail(id)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           this.userinfo = res.data.data
           this.userinfo.head_img = axios.defaults.baseURL + this.userinfo.head_img
         })
