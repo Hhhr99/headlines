@@ -1,12 +1,14 @@
 <template>
   <div class="personal">
-    <router-link to="/edit_profile">
+    <router-link :to="'/edit_profile/'+id">
       <div class="profile">
         <img :src="userinfo.head_img" alt/>
         <div class="profile-center">
           <div class="name">
             <span class="iconfont"
-                  :class="{iconxingbienan:userinfo.gender===1,iconxingbienv:userinfo.gender===0}"></span>{{ userinfo.nickname }}
+                  :class="{iconxingbienan:userinfo.gender===1,iconxingbienv:userinfo.gender===0}"></span>{{
+              userinfo.nickname
+            }}
           </div>
           <div class="time">2019-9-24</div>
         </div>
@@ -17,11 +19,9 @@
     <my_cell title="我的跟帖" desc="跟帖/回复"></my_cell>
     <my_cell title="我的收藏" desc="文章/视频"></my_cell>
     <my_cell title="设置"></my_cell>
-    <my_button type="danger" style="margin-top: 20px">退出</my_button>
+    <my_button type="danger" style="margin-top: 20px" @click="exit">退出</my_button>
   </div>
 </template>
-
-
 
 
 <script>
@@ -35,12 +35,14 @@ export default {
   components: {My_button, My_cell},
   data() {
     return {
-      userinfo: {}
+      userinfo: {},
+      id: '',
     }
   },
   mounted() {
     // console.log(this.$route.params.id)
     let id = this.$route.params.id
+    this.id = id
     getUserDetail(id)
         .then(res => {
           // console.log(res)
@@ -50,6 +52,12 @@ export default {
         .catch(err => {
           console.log(err)
         })
+  },
+  methods: {
+    exit() {
+      localStorage.removeItem('token')
+      this.$router.push({name: 'login'})
+    }
   }
 }
 </script>
