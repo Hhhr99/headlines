@@ -9,12 +9,12 @@
       </template>
     </my_header>
     <div class="imgarea">
-      <img src="@/assets/logo.png" alt="">
+      <img :src="userinfo.head_img" alt="">
       <van-uploader :after-read="afterRead"/>
     </div>
-    <my_cell title="昵称" desc="我的昵称"></my_cell>
-    <my_cell title="密码" desc="******"></my_cell>
-    <my_cell title="性别" desc="男"></my_cell>
+    <my_cell title="昵称" :desc="userinfo.nickname"></my_cell>
+    <my_cell title="密码" :desc="userinfo.password"></my_cell>
+    <my_cell title="性别" :desc="userinfo.gender===1?'男':'女'"></my_cell>
   </div>
 
 </template>
@@ -22,15 +22,59 @@
 <script>
 import my_header from "@/components/my_header";
 import my_cell from "@/components/my_cell";
+import {getUserDetail, uploadUserInfo} from "@/apis/user";
+import {uploadFile} from "@/apis/fileUpload";
+import axios from "@/utils/request";
 
 export default {
   name: "edit_profile",
+  data() {
+    return {
+      userinfo: {},
+      id: ''
+    }
+  },
   components: {my_cell, my_header},
   methods: {
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
       console.log(file);
+      let formdata = new FormData()
+      formdata.append('file', file.file)
+      uploadFile(formdata)
+          .then(res => {
+            console.log(res)
+            if (res.data.message === '文件上传成功') {
+              this.$toast.success(res.data.message)
+              this.userinfo.head_img = axios.defaults.baseURL + res.data.data.url
+              uploadUserInfo(this.$route.params.id, {head_img: res.data.data.url})
+                  .then(res => {
+                    console.log(res)
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
     },
+  },
+  mounted() {
+    // console.log(this.$route.params.id)
+    let id = this.$route.params.id
+    this.id = id
+    getUserDetail(id)
+        .then(res => {
+          console.log(res)
+          this.userinfo = res.data.data
+          this.userinfo.head_img = axios.defaults.baseURL + this.userinfo.head_img
+        })
+        .catch(err => {
+          console.log(err)
+        })
   },
 }
 </script>

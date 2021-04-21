@@ -25,3 +25,12 @@ export const getUserDetail = (id) => {
         // headers: {Authorization : localStorage.getItem('token')}
     })
 }
+
+// 编辑用户头像
+export const uploadUserInfo = (id, data) => {
+    return axios({
+        method: 'post',
+        url: `/user_update/${id}`,
+        data
+    })
+}
