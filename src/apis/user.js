@@ -10,10 +10,18 @@ export const userLogin = (data) => {
     })
 }
 // 用户注册
-export const userRegister=(data)=>{
+export const userRegister = (data) => {
     return axios({
-        method:'post',
-        url:'/register',
+        method: 'post',
+        url: '/register',
         data
+    })
+}
+
+// 用户详细
+export const getUserDetail = (id) => {
+    return axios({
+        url: `/user/${id}`,
+        headers: {Authorization : localStorage.getItem('token')}
     })
 }
