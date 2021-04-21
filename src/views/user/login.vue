@@ -30,8 +30,8 @@ export default {
   data() {
     return {
       user: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '1234'
       }
     }
   },
@@ -43,6 +43,7 @@ export default {
               console.log(res)
               localStorage.setItem('token', res.data.data.token)
               this.$toast.success('登录成功')
+              this.$router.push({path: `/personal/${res.data.data.user.id}`})
             })
             .catch((err) => {
               console.log(err)

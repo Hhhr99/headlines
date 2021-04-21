@@ -17,23 +17,29 @@ const router = new VueRouter({
         },
         {
             name: 'personal',
-            path: '/personal',
+            path: '/personal/:id',
             component: () => import('@/views/user/personal')
         }
     ]
 })
 
+import {Toast} from "vant";
+// 导航守卫
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
-        next()
-    } else {
+    console.log(to)
+    if (to.path.indexOf('/personal/') !== -1) {
+        // 验证是否登录
         let token = localStorage.getItem('token')
         if (token) {
             next()
         } else {
+            Toast('未登录，请先登录')
             next({name: 'login'})
         }
+    } else {
+        next()
     }
+    next()
 })
 
 export default router
