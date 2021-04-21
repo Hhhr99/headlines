@@ -21,6 +21,9 @@
   </div>
 </template>
 
+
+
+
 <script>
 import My_cell from "@/components/my_cell";
 import My_button from "@/components/my_button";
@@ -36,11 +39,11 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route.params.id)
+    // console.log(this.$route.params.id)
     let id = this.$route.params.id
     getUserDetail(id)
         .then(res => {
-          console.log(res)
+          // console.log(res)
           this.userinfo = res.data.data
           this.userinfo.head_img = axios.defaults.baseURL + this.userinfo.head_img
         })
