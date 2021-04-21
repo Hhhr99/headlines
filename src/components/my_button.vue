@@ -1,5 +1,6 @@
 <template>
-  <div class="btn" :class="{success:type==='success',danger:type==='danger',primary:type==='primary'}" @click="handerClick">
+  <div class="btn" :class="{success:type==='success',danger:type==='danger',primary:type==='primary'}"
+       @click="handerClick">
     <slot></slot>
   </div>
 </template>
@@ -33,6 +34,7 @@ export default {
   color: #fff;
   font-weight: bold;
   font-size: 20px;
+  margin: 0 auto;
 }
 
 .success {

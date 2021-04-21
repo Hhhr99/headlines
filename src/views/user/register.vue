@@ -46,7 +46,7 @@ export default {
               if ((res.data.message === '注册成功')) {
                 this.$toast('注册成功')
               } else {
-                this.$toast.fail('注册失败')
+                this.$toast.fail(res.data.message)
               }
             })
             .catch((err) => {
