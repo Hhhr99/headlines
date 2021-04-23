@@ -5,37 +5,57 @@
       <div class="logo">
         <span class="iconfont iconnew"></span>
       </div>
-      <div class="search" @click="$router.push({name:'Search'})">
-        <van-icon name="search"/>
+      <div class="search">
+        <van-icon name="search" />
         <span>搜索商品</span>
       </div>
-      <div class="user" @click="$router.push({path:`/personal/${id}`})">
-        <van-icon name="manager-o"/>
+      <div class="user">
+        <van-icon name="manager-o" />
       </div>
     </div>
     <!--    tab标签页-->
     <van-tabs v-model="active" sticky swipeable>
-      <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">内容 {{ index + 1 }}</van-tab>
+      <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">
+        <my_post-block v-for="post in postlist" :key="post.id" :article="post"></my_post-block>
+      </van-tab>
     </van-tabs>
+
   </div>
 </template>
 
 <script>
 import {getCateList} from "@/apis/category";
+import {getPostList} from "@/apis/post";
+import My_postBlock from "@/components/my_postBlock";
 
 export default {
   name: "index",
+  components: {My_postBlock},
   data() {
     return {
-      active: 1,
-      cateList: []
-    };
+      active: localStorage.getItem('token') ? 1 : 0,
+      cateList: [],
+      postlist: []
+    }
   },
   async mounted() {
+    // 获取栏目数据
     let res = await getCateList()
-    console.log(res);
+    console.dir(res);
     this.cateList = res.data.data
     // console.log(this.cateList)
+
+    // 获取当前被激活栏目的新闻数据
+    let id = this.cateList[this.active].id
+    this.postlist = (await getPostList(id)).data.data
+  },
+  watch: {
+    async active() {
+      let id = this.cateList[this.active].id
+      console.log(id)
+      this.postlist = (await getPostList(id)).data.data
+      console.log(this.postlist)
+    }
   }
 }
 </script>
