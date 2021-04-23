@@ -6,6 +6,15 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     routes: [
         {
+            path: '/',
+            redirect: {name: 'index'},
+        },
+        {
+            name: 'index',
+            path: '/index',
+            component: () => import('@/views/index')
+        },
+        {
             name: 'login',
             path: '/login',
             component: () => import('@/views/user/login')
@@ -24,7 +33,7 @@ const router = new VueRouter({
             name: 'edit_profile',
             path: '/edit_profile/:id',
             component: () => import('@/views/user/edit_profile')
-        }
+        },
     ]
 })
 
