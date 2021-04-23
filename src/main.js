@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 
-import reset from './styles/reset.less'
+import reset from '@/styles/reset.less'
 import router from './router/index'
 
 import {Toast, Icon, Uploader, Dialog, ActionSheet,Field,Tab, Tabs } from "vant";

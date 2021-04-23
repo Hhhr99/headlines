@@ -15,26 +15,28 @@
     </div>
     <!--    tab标签页-->
     <van-tabs v-model="active" sticky swipeable>
-      <van-tab title="标签 1" style="height: 1000px;background-color: yellow;">内容 1</van-tab>
-      <van-tab title="标签 2" style="height: 1000px;background-color: red;">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
-      <van-tab title="标签 5">内容 5</van-tab>
-      <van-tab title="标签 6">内容 6</van-tab>
-      <van-tab title="标签 7">内容 7</van-tab>
-      <van-tab title="标签 8">内容 8</van-tab>
+      <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">内容 {{ index + 1 }}</van-tab>
     </van-tabs>
   </div>
 </template>
 
 <script>
+import {getCateList} from "@/apis/category";
+
 export default {
   name: "index",
   data() {
     return {
       active: 1,
+      cateList: []
     };
   },
+  async mounted() {
+    let res = await getCateList()
+    console.log(res);
+    this.cateList = res.data.data
+    // console.log(this.cateList)
+  }
 }
 </script>
 
