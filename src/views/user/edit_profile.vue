@@ -23,7 +23,8 @@
       <van-field v-model.trim="newPass" label="新密码" placeholder="请输入新密码"/>
     </van-dialog>
 
-    <my_cell title="性别" :desc="userinfo.gender===1?'男':'女'"></my_cell>
+    <my_cell title="性别" :desc="userinfo.gender===1?'男':'女'" @click.native="gendershow=!gendershow"></my_cell>
+    <van-action-sheet v-model="gendershow" :actions="actions" @select="onSelect" :close-on-click-action="true"/>
   </div>
 
 </template>
@@ -43,11 +44,16 @@ export default {
       id: '',
       nickshow: false,
       passshow: false,
+      gendershow: false,
       // 昵称所对应的变量
       nickname: '',
       // 用户所输入的原始密码
       originPass: '',
-      newPass: ''
+      // 新密码
+      newPass: '',
+      show: false,
+      actions: [{name: '男'}, {name: '女'}],
+
     }
   },
   components: {my_cell, my_header},
@@ -77,6 +83,7 @@ export default {
             console.log(err)
           })
     },
+
     // 昵称
     showNicknameDialog() {
       this.nickshow = !this.nickshow
@@ -95,6 +102,7 @@ export default {
             console.log(err)
           })
     },
+
     // 修改用户密码
     async editPass() {
       if (this.originPass === this.userinfo.password) {
@@ -112,6 +120,7 @@ export default {
         this.$toast.fail('原密码输入不正确')
       }
     },
+
     // 编辑密码时，阻止模态框的关闭
     // action：当前用户的行为：confirm  cancel
     beforeClose(action, done) {
@@ -124,6 +133,17 @@ export default {
       } else {
         done()
       }
+    },
+
+    // 修改性别
+    async onSelect(item) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      let gender = item.name === '男' ? 1 : 0
+      let res = await uploadUserInfo(this.$route.params.id, {gender})
+      this.userinfo.gender = gender
+      this.$toast.success(res.data.message)
+      console.log(res)
     },
   },
   mounted() {
