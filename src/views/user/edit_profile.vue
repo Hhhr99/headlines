@@ -16,7 +16,13 @@
     <van-dialog v-model="nickshow" title="编辑昵称" show-cancel-button @confirm="editNickname">
       <van-field v-model="nickname" label="昵称" placeholder="请输入用户名"/>
     </van-dialog>
-    <my_cell title="密码" :desc="userinfo.password"></my_cell>
+
+    <my_cell title="密码" :desc="userinfo.password" @click.native="passshow=!passshow;originPass=newPass=''"></my_cell>
+    <van-dialog v-model="passshow" title="编辑密码" show-cancel-button @confirm="editPass" :beforeClose="beforeClose">
+      <van-field v-model.trim="originPass" label="原密码" placeholder="请输入原密码"/>
+      <van-field v-model.trim="newPass" label="新密码" placeholder="请输入新密码"/>
+    </van-dialog>
+
     <my_cell title="性别" :desc="userinfo.gender===1?'男':'女'"></my_cell>
   </div>
 
@@ -36,8 +42,12 @@ export default {
       userinfo: {},
       id: '',
       nickshow: false,
+      passshow: false,
       // 昵称所对应的变量
-      nickname: ''
+      nickname: '',
+      // 用户所输入的原始密码
+      originPass: '',
+      newPass: ''
     }
   },
   components: {my_cell, my_header},
@@ -84,7 +94,37 @@ export default {
           .catch(err => {
             console.log(err)
           })
-    }
+    },
+    // 修改用户密码
+    async editPass() {
+      if (this.originPass === this.userinfo.password) {
+        if (/^.{3,16}$/.test(this.newPass)) {
+          let res = await uploadUserInfo(this.$route.params.id, {password: this.newPass})
+          console.log(res)
+          // 虽然这里不需要更新页面中的显示，但是之前判断原密码是否正确是通过userinfo进行的，所以在密码修改成功之后，为了下次的密码匹配，我们将userinfo中的数据进行更新
+          this.userinfo.password = this.newPass
+          this.$toast.success(res.data.message)
+
+        } else {
+          this.$toast.fail('请输入3~16位密码')
+        }
+      } else {
+        this.$toast.fail('原密码输入不正确')
+      }
+    },
+    // 编辑密码时，阻止模态框的关闭
+    // action：当前用户的行为：confirm  cancel
+    beforeClose(action, done) {
+      if (action === 'confirm') {
+        if (this.originPass !== this.userinfo.password || !(/^.{3,16}$/).test(this.newPass)) {
+          done(false)
+        } else {
+          done()
+        }
+      } else {
+        done()
+      }
+    },
   },
   mounted() {
     // console.log(this.$route.params.id)
