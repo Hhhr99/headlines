@@ -4,7 +4,7 @@ import axios from "@/utils/request";
 // 1.获取栏目的文章数据
 export const getPostList = (params) => {
     return axios({
-            url: `/post`,
-            params
+        url: `/post`,
+        params
     })
 }

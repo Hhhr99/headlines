@@ -16,6 +16,8 @@
     <!--    tab标签页-->
     <van-tabs v-model="active" sticky swipeable>
       <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">
+        <van-list v-model="cate.loading" :finished="cate.finished" finished-text="没有更多了" :offset="5"
+                  :immediate-check="false" @load="onLoad"></van-list>
         <my_post-block v-for="post in cate.postList" :key="post.id" :post="post"></my_post-block>
       </van-tab>
     </van-tabs>
@@ -52,26 +54,44 @@ export default {
         ...v,
         postList: [],//为当前栏目所添加的用于存储这个栏目的新闻数据的数组
         pageIndex: 1,// 当前栏目的当前页码
-        pageSize: 6, // 当前栏目的每页所显示的数量
+        pageSize: 20, // 当前栏目的每页所显示的数量
+        loading: false,//当前组件的上拉加载的状态
+        finished: false//当前组件的数据是否全部加载完毕的标记
       }
     })
     console.log(this.cateList)
     // 获取当前被激活栏目的新闻数据
-    await this.getpost()
+    // await this.getpost()
 
   },
   methods: {
+    // 上拉加载下一页的数据
+    onLoad() {
+      this.cateList[this.active].pageIndex++
+      setTimeout(() => {
+        this.getpost()
+      }, 1000)
+    },
     async getpost() {
       // 加载默认栏目的新闻数据：关键在于获取当前栏目的id
       // let id = this.cateList[this.active].id
       // console.log(id)
       // 将获取到的新闻数据存储到当前栏目的postList数组中
-      this.cateList[this.active].postList = (await getPostList({
+      let current = (await getPostList({
         category: this.cateList[this.active].id,
         pageSize: this.cateList[this.active].pageSize,
         pageIndex: this.cateList[this.active].pageIndex
       })).data.data
-      console.log(this.cateList[this.active].postList)
+
+      // 将获取到的新闻数据储存到当前栏目的postList数组中
+      this.cateList[this.active].postList.push(...current)
+      // 本次请求完成之后，将loading重置为false,以便下一次上拉
+      this.cateList[this.active].loading = false
+      // 判断数据是否已全部加载完毕：我要求6条数据，结果返回的数量小于6，说明真没有数据了
+      if (current.length < this.cateList[this.active].pageSize) {
+        this.cateList[this.active].finished = true
+      }
+      // console.log(this.cateList[this.active].postList)
     }
   },
   watch: {
