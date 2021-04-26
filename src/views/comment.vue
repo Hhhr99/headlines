@@ -16,6 +16,8 @@
         </div>
         <span>回复</span>
       </div>
+      <my_comment-item v-if='value.parent'
+                       :parent='value.parent'></my_comment-item>
       <div class="text">{{ value.content }}</div>
     </div>
   </div>
@@ -25,9 +27,11 @@
 import my_header from '@/components/my_header'
 import {getPostComment} from '@/apis/post.js'
 import axios from '@/utils/request.js'
+import My_commentItem from "@/components/my_commentItem";
 
 export default {
   components: {
+    My_commentItem,
     my_header
   },
   data() {
