@@ -4,13 +4,13 @@
          v-show='!isFocus'>
       <input type="text"
              placeholder="写跟帖"
-             @click="isFocus=!isFocus" />
+             @click="isFocus=!isFocus"/>
       <span class="comment">
         <i class="iconfont iconpinglun-"></i>
-        <em>{{post.comment_length}}</em>
+        <em>{{ post.comment_length }}</em>
       </span>
       <i class="iconfont iconshoucang"
-         :class="{active:post.has_star}"></i>
+         :class="{active:post.has_star}" @click="starThisPost"></i>
       <i class="iconfont iconfenxiang"></i>
     </div>
     <div class="inputcomment"
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import {starPost} from '@/apis/post'
+
 export default {
   props: {
     post: {
@@ -33,9 +35,16 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       isFocus: false
+    }
+  },
+  methods: {
+    async starThisPost() {
+      let res = await starPost(this.post.id)
+      this.$toast.success(res.data.message)
+      this.post.has_star = !this.post.has_star
     }
   }
 }
@@ -48,6 +57,7 @@ export default {
   left: 0;
   bottom: 0;
 }
+
 .inputcomment {
   padding: 10px;
   box-sizing: border-box;
@@ -55,6 +65,7 @@ export default {
   display: flex;
   background-color: #fff;
   align-items: flex-end;
+
   textarea {
     flex: 3;
     background-color: #eee;
@@ -62,9 +73,11 @@ export default {
     border-radius: 10px;
     padding: 10px;
   }
+
   div {
     padding: 20px;
   }
+
   span {
     display: block;
     flex: 1;
@@ -78,6 +91,7 @@ export default {
     font-size: 13px;
   }
 }
+
 .addcomment {
   width: 100%;
   box-sizing: border-box;
@@ -89,6 +103,7 @@ export default {
   background-color: #fff;
   bottom: 0;
   left: 0;
+
   > input {
     flex: 4;
     height: 30px;
@@ -99,12 +114,15 @@ export default {
     padding-left: 20px;
     font-size: 14px;
   }
+
   i {
     font-size: 20px;
   }
+
   > span {
     flex: 1;
     position: relative;
+
     > em {
       position: absolute;
       right: 0;
@@ -116,10 +134,12 @@ export default {
       padding: 3px 5px;
     }
   }
+
   > i {
     flex: 1;
   }
 }
+
 .active {
   color: red;
 }
