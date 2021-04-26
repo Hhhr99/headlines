@@ -10,7 +10,7 @@
         <span>搜索商品</span>
       </div>
       <div class="user">
-        <van-icon name="manager-o"/>
+        <van-icon name="manager-o" @click="jump"/>
       </div>
     </div>
     <!--    tab标签页-->
@@ -67,6 +67,18 @@ export default {
 
   },
   methods: {
+    // 单机各人中心图标
+    jump() {
+      // 判断是否有id,如果有就跳转到个人中心页
+      let id = localStorage.getItem('heimatoutiao_userid')
+      if (id) {
+        this.$router.push({path: `/personal/${id}`})
+      } else {
+        this.$toast.fail('未登陆，请先登陆')
+        this.$router.push({path: `/login`})
+      }
+      // 如果没有，则登陆
+    },
     onRefresh() {
       // 下拉刷新需要做什么
       // 1.页码重新设置为1

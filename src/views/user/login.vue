@@ -42,6 +42,7 @@ export default {
             .then((res) => {
               console.log(res)
               localStorage.setItem('token', res.data.data.token)
+              localStorage.setItem('userid', res.data.data.user.id)
               this.$toast.success('登录成功')
               this.$router.push({path: `/personal/${res.data.data.user.id}`})
               let redirect = location.href.split('=')[1]
