@@ -16,7 +16,7 @@
     <!--    tab标签页-->
     <van-tabs v-model="active" sticky swipeable>
       <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">
-        <my_post-block v-for="post in postlist" :key="post.id" :post="post"></my_post-block>
+        <my_post-block v-for="post in cate.postList" :key="post.id" :post="post"></my_post-block>
       </van-tab>
     </van-tabs>
 
@@ -34,8 +34,8 @@ export default {
   data() {
     return {
       active: localStorage.getItem('token') ? 1 : 0,
-      cateList: [],
-      postlist: []
+      cateList: [],// 所有栏目数据
+      // catePostList: []
     }
   },
   async mounted() {
@@ -48,29 +48,40 @@ export default {
     // 数据改造
     this.cateList = this.cateList.map((v) => {
       // postList：为当前栏目所添加的用于存储这个栏目的新闻数据的数组
-      return {...v, postlist: []}
+      return {
+        ...v,
+        postList: [],//为当前栏目所添加的用于存储这个栏目的新闻数据的数组
+        pageIndex: 1,// 当前栏目的当前页码
+        pageSize: 6, // 当前栏目的每页所显示的数量
+      }
     })
+    console.log(this.cateList)
     // 获取当前被激活栏目的新闻数据
+    await this.getpost()
 
+  },
+  methods: {
+    async getpost() {
+      // 加载默认栏目的新闻数据：关键在于获取当前栏目的id
+      // let id = this.cateList[this.active].id
+      // console.log(id)
+      // 将获取到的新闻数据存储到当前栏目的postList数组中
+      this.cateList[this.active].postList = (await getPostList({
+        category: this.cateList[this.active].id,
+        pageSize: this.cateList[this.active].pageSize,
+        pageIndex: this.cateList[this.active].pageIndex
+      })).data.data
+      console.log(this.cateList[this.active].postList)
+    }
   },
   watch: {
     async active() {
       // 单击栏目获取当前栏目的新闻数据：关键也是获取栏目id
-      if (this.active[this.active].postlist.length === 0) {
-        let id = this.active[this.active].id
-        console.log(this.active, id)
-        this.cateList[this.active].postlist = (await getCateList(id)).data.data
+      if (this.cateList[this.active].postList.length === 0) {
+        await this.getpost()
       }
     }
   },
-  methods: {
-    async getpost() {
-      let id = this.cateList[this.active].id
-      // console.log(id)
-      this.postlist = (await getPostList(id)).data.data
-      console.log(this.postlist)
-    }
-  }
 }
 </script>
 
