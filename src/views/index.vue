@@ -16,8 +16,9 @@
     <!--    tab标签页-->
     <van-tabs v-model="active" sticky swipeable>
       <van-tab :title="cate.name" v-for="(cate,index) in cateList" :key="cate.id">
-        <van-list v-model="cate.loading" :finished="cate.finished" finished-text="没有更多了" :offset="5"
+        <van-list v-model="cate.loading" :finished="cate.finished" finished-text="玩命加载中..." :offset="200"
                   :immediate-check="false" @load="onLoad"></van-list>
+        <van-pull-refresh v-model="cate.isLoading" @refresh="onRefresh"></van-pull-refresh>
         <my_post-block v-for="post in cate.postList" :key="post.id" :post="post"></my_post-block>
       </van-tab>
     </van-tabs>
@@ -54,9 +55,10 @@ export default {
         ...v,
         postList: [],//为当前栏目所添加的用于存储这个栏目的新闻数据的数组
         pageIndex: 1,// 当前栏目的当前页码
-        pageSize: 20, // 当前栏目的每页所显示的数量
+        pageSize: 6, // 当前栏目的每页所显示的数量
         loading: false,//当前组件的上拉加载的状态
-        finished: false//当前组件的数据是否全部加载完毕的标记
+        finished: false, //当前组件的数据是否全部加载完毕的标记
+        isLoading: false // 当前组件的下拉刷新的状态，标记是否正在下拉刷新
       }
     })
     console.log(this.cateList)
@@ -65,12 +67,21 @@ export default {
 
   },
   methods: {
+    onRefresh() {
+      // 下拉刷新需要做什么
+      // 1.页码重新设置为1
+      this.cateList[this.active].pageIndex = 1
+      // 2.将数据清空
+      this.cateList[this.active].postList.length = 0
+      // 3.将之前可能重置为true的finished状态重置为false
+      this.cateList[this.active].finished = false
+
+      this.getpost()
+    },
     // 上拉加载下一页的数据
     onLoad() {
       this.cateList[this.active].pageIndex++
-      setTimeout(() => {
-        this.getpost()
-      }, 1000)
+      this.getpost()
     },
     async getpost() {
       // 加载默认栏目的新闻数据：关键在于获取当前栏目的id
@@ -87,6 +98,8 @@ export default {
       this.cateList[this.active].postList.push(...current)
       // 本次请求完成之后，将loading重置为false,以便下一次上拉
       this.cateList[this.active].loading = false
+      // 本次请求完成之后，将下拉刷新折状态重置为false,以便下一次下拉刷新
+      this.cateList[this.active].isLoading = false
       // 判断数据是否已全部加载完毕：我要求6条数据，结果返回的数量小于6，说明真没有数据了
       if (current.length < this.cateList[this.active].pageSize) {
         this.cateList[this.active].finished = true

@@ -5,7 +5,7 @@ import App from './App.vue'
 import reset from '@/styles/reset.less'
 import router from './router/index'
 
-import {Toast, Icon, Uploader, Dialog, ActionSheet,Field,Tab, Tabs ,List} from "vant";
+import {Toast, Icon, Uploader, Dialog, ActionSheet,Field,Tab, Tabs ,List,PullRefresh } from "vant";
 
 Vue.use(Toast)
     .use(Icon)
@@ -16,6 +16,7 @@ Vue.use(Toast)
     .use(Tab )
     .use(Tabs )
     .use(List )
+    .use(PullRefresh )
 
 Vue.config.productionTip = false
 
