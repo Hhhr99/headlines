@@ -49,6 +49,7 @@ export default {
   methods: {
     async cancelFollow(id, index) {
       let res = await unFollowUser(id)
+      this.$toast.success(res.data.message)
       this.followList.splice(index, 1)
     }
   }

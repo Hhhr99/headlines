@@ -17,7 +17,7 @@
     </router-link>
     <my_cell title="我的关注" desc="关注的用户" @click.native="$router.push({path:'/myfollow'})"></my_cell>
     <my_cell title="我的跟帖" desc="跟帖/回复"></my_cell>
-    <my_cell title="我的收藏" desc="文章/视频"></my_cell>
+    <my_cell title="我的收藏" desc="文章/视频" @click.native="$router.push({name:'mystar'})"></my_cell>
     <my_cell title="设置"></my_cell>
     <my_button type="danger" style="margin-top: 20px" @click="exit">退出</my_button>
   </div>

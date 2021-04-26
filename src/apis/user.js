@@ -56,3 +56,10 @@ export const getUserFollows = () => {
         url: `/user_follows`
     })
 }
+
+// 8.获取用户收藏列表数据
+export const getUserStars = () => {
+    return axios({
+        url: `/user_star`
+    })
+}
