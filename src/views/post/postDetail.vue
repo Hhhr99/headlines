@@ -6,7 +6,7 @@
                   @click="$router.back()"/>
         <span class="iconfont iconnew new"></span>
       </div>
-      <span>关注</span>
+      <span @click="followUserById" :class="{active:post.has_follow}">{{ post.has_follow ? '已关注' : '关注' }}</span>
     </div>
     <div class="detail">
       <div class="title">{{ post.title }}</div>
@@ -16,8 +16,16 @@
       </div>
       <!-- 细节：内容是网页结构，所以需要进行解析，所以使用v-html -->
       <div class="content"
-           v-html='post.content'>
+           v-html='post.content' v-if="post.type===1">
       </div>
+      <!--
+   1.controls:是否显示播放控制面板，如果没有这个面板，那么播放器不可见
+   2.src:播放的视频的路径
+   3.autoplay:自动播放
+   4.loop:循环播放
+   5.poster:封面，视频的第一帧画面 -->
+      <video :src="post.content" poster="https://img0.baidu.com/it/u=1897757337,3204665023&fm=26&fmt=auto&gp=0.jpg"
+             controls v-else></video>
       <div class="opt">
         <span class="like">
           <van-icon name="good-job-o"/>点赞
@@ -50,11 +58,14 @@
 
 <script>
 import {getPostDetail} from '@/apis/post'
+import {followUser, unFollowUser} from '@/apis/user'
 
 export default {
   data() {
     return {
-      post: {}
+      post: {
+        user: {}
+      }
     }
   },
   async mounted() {
@@ -62,6 +73,20 @@ export default {
     let res = await getPostDetail(id)
     this.post = res.data.data
     console.log(res);
+  },
+  methods: {
+    async followUserById() {
+      let id = this.post.user.id
+      console.log(id)
+      let res
+      if (this.post.has_follow) {
+        res = await unFollowUser(id)
+      } else {
+        res = await followUser(id)
+      }
+      this.post.has_follow = !this.post.has_follow
+      this.$toast.success(res.data.message)
+    }
   }
 }
 </script>
@@ -99,6 +124,12 @@ export default {
     text-align: center;
     border-radius: 15px;
     font-size: 13px;
+
+    &.active {
+      background-color: transparent;
+      border: 1px solid #aaa;
+      color: #000;
+    }
   }
 }
 
@@ -130,6 +161,11 @@ export default {
     /deep/ p {
       text-indent: 2em;
     }
+  }
+
+  video {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
 
