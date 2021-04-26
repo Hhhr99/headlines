@@ -27,8 +27,8 @@
       <video :src="post.content" poster="https://img0.baidu.com/it/u=1897757337,3204665023&fm=26&fmt=auto&gp=0.jpg"
              controls v-else></video>
       <div class="opt">
-        <span class="like">
-          <van-icon name="good-job-o"/>点赞
+        <span class="like" :class="{active:post.has_like}" @click="likeThisPostById">
+          <van-icon name="good-job-o"/>{{ post.like_lenght ? post.like_lenght : '点赞' }}
         </span>
         <span class="chat">
           <van-icon name="chat"
@@ -53,14 +53,18 @@
       </div>
       <div class="more">更多跟帖</div>
     </div>
+    <!--    底部评论快-->
+    <my_comment-footer :post="post"></my_comment-footer>
   </div>
 </template>
 
 <script>
-import {getPostDetail} from '@/apis/post'
+import {getPostDetail, likePost} from '@/apis/post'
 import {followUser, unFollowUser} from '@/apis/user'
+import My_commentFooter from "@/components/my_commentFooter";
 
 export default {
+  components: {My_commentFooter},
   data() {
     return {
       post: {
@@ -75,6 +79,19 @@ export default {
     console.log(res);
   },
   methods: {
+    // 文章点赞和取笑点赞
+    async likeThisPostById() {
+      let res = await likePost(this.post.id)
+      console.log(res)
+      if (res.data.message == '点赞成功') {
+        ++this.post.like_length
+      } else {
+        --this.post.like_length
+      }
+      this.post.has_like = !this.post.has_like
+      this.$toast.success(res.data.message)
+    },
+    // 关注用户和取笑关注用户
     async followUserById() {
       let id = this.post.user.id
       console.log(id)
@@ -92,6 +109,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.articaldetail {
+  padding-bottom: 60px;
+}
+
 .header {
   padding: 0px 10px;
   height: 50px;
@@ -182,6 +203,10 @@ export default {
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 15px;
+  }
+
+  .active {
+    color: red;
   }
 
   .w {

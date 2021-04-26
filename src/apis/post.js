@@ -15,3 +15,10 @@ export const getPostDetail = (id) => {
         url: '/post/' + id
     })
 }
+
+// 3.点赞文章
+export const likePost = (id) => {
+    return axios({
+        url: '/post_like/' + id
+    })
+}
