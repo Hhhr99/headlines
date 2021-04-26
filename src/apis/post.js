@@ -29,3 +29,10 @@ export const starPost = (id) => {
         url: '/post_star/' + id
     })
 }
+
+// 5.获取文章的评论数据
+export const getPostComment = (id) => {
+    return axios({
+        url: '/post_comment/' + id
+    })
+}
