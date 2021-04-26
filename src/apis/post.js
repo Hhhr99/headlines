@@ -35,7 +35,16 @@ export const getPostComment = (id) => {
     return axios({
         url: '/post_comment/' + id,
         params: {
-            pageSize: 50
+            pageSize: 10
         }
+    })
+}
+
+// 6.发表+回复 文章评论
+export const publishComment = (id, data) => {
+    return axios({
+        method: 'post',
+        url: `/post_comment/${id}`,
+        data
     })
 }

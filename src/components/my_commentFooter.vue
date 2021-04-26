@@ -16,9 +16,9 @@
     <div class="inputcomment"
          v-show='isFocus'>
       <textarea ref='commtext'
-                rows="5"></textarea>
+                rows="5" v-model.trim="content"></textarea>
       <div>
-        <span>发 送</span>
+        <span @click="sendComment">发 送</span>
         <span @click="isFocus=!isFocus">取 消</span>
       </div>
     </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {starPost} from '@/apis/post'
+import {starPost, publishComment} from '@/apis/post'
 
 export default {
   props: {
@@ -37,15 +37,40 @@ export default {
   },
   data() {
     return {
-      isFocus: false
+      isFocus: false,
+      content: ''
     }
   },
   methods: {
+    // 收藏文章
     async starThisPost() {
       let res = await starPost(this.post.id)
       this.$toast.success(res.data.message)
       this.post.has_star = !this.post.has_star
+    },
+    // 发表评论
+    async sendComment() {
+      if (this.content.length === 0) {
+        this.$toast.fail('请输入评论内容')
+        return
+      }
+      // 1.准备参数
+      let data = {
+        content: this.content
+      }
+      // 2.发起评论请求
+      let res = await publishComment(this.post.id, data)
+      console.log(res);
+      // 1.给提示
+      this.$toast.success('发表评论成功')
+      // 2.隐藏输入框
+      this.isFocus = false
+      // 3.清空之前输入的内容
+      this.content = ''
+      // 4.页面内容的刷新-子组件要告诉父组件进行列表数据的刷新
+      this.$emit('refresh')
     }
+
   }
 }
 </script>

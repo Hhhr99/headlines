@@ -6,49 +6,74 @@
                   @click="$router.go(-1)"/>
       </template>
     </my_header>
-    <div class="item" v-for="value in commentList" :key="value.id">
-      <div class="head">
-        <img :src="axios.defaults.baseURL +value.user.head_img"
-             alt/>
-        <div>
-          <p>{{ value.user.nickname }}</p>
-          <span>时间</span>
+    <div class="list">
+      <div class="item" v-for="value in commentList" :key="value.id">
+        <div class="head">
+          <img :src="axios.defaults.baseURL +value.user.head_img"
+               alt/>
+          <div>
+            <p>{{ value.user.nickname }}</p>
+            <span>时间</span>
+          </div>
+          <span>回复</span>
         </div>
-        <span>回复</span>
+        <my_comment-item v-if='value.parent'
+                         :parent='value.parent'></my_comment-item>
+        <div class="text">{{ value.content }}</div>
       </div>
-      <my_comment-item v-if='value.parent'
-                       :parent='value.parent'></my_comment-item>
-      <div class="text">{{ value.content }}</div>
     </div>
+    <!-- 底部评论块 -->
+    <my_comment-footer :post='article'
+                       @refresh='refresh'></my_comment-footer>
   </div>
 </template>
 
 <script>
 import my_header from '@/components/my_header'
-import {getPostComment} from '@/apis/post.js'
+import {getPostComment, getPostDetail} from '@/apis/post.js'
 import axios from '@/utils/request.js'
 import My_commentItem from "@/components/my_commentItem";
+import My_commentFooter from "@/components/my_commentFooter";
 
 export default {
   components: {
+    My_commentFooter,
     My_commentItem,
     my_header
   },
   data() {
     return {
-      commentList: [], axios
+      commentList: [], axios,
+      article: {}
     }
   },
   async mounted() {
-    let id = this.$route.params.id
-    let res = await getPostComment(id)
-    console.log(res);
-    this.commentList = res.data.data
+    this.init()
+  },
+  methods: {
+    async init() {
+      let id = this.$route.params.id
+      // 获取文章详情数据
+      this.article = (await getPostDetail(id)).data.data
+      // 获取文章的评论数据
+      let res = await getPostComment(id)
+      console.log(res);
+      this.commentList = res.data.data
+    },
+    refresh() {
+      this.init()
+      // 让列表自动的滚动到顶部
+      window.scrollTo(0, 0)
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.list {
+  padding-bottom: 60px;
+}
+
 .item {
   padding: 10px;
   border-bottom: 1px solid #ccc;
