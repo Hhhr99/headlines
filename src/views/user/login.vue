@@ -44,6 +44,12 @@ export default {
               localStorage.setItem('token', res.data.data.token)
               this.$toast.success('登录成功')
               this.$router.push({path: `/personal/${res.data.data.user.id}`})
+              let redirect = location.href.split('=')[1]
+              if (redirect) {
+                location.href = decodeURIComponent(redirect)
+              } else {
+                this.$router.push({path: `/personal/${res.data.data.user.id}`})
+              }
             })
             .catch((err) => {
               console.log(err)

@@ -101,6 +101,7 @@ export default {
       } else {
         res = await followUser(id)
       }
+      console.log('文章详细页的操作：', res)
       this.post.has_follow = !this.post.has_follow
       this.$toast.success(res.data.message)
     }

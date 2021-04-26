@@ -21,10 +21,13 @@ axios.interceptors.request.use(function (config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
     // 对响应数据做点什么
-    return response;
+    // return response;
+    console.log('经过了响应拦截器', response)
     if (response.data.message === '用户信息验证失败') {
         Toast.fail('身份信息认证失败')
         window.location.href = '#/login'
+        console.log('当前页面地址：', window.location.href)
+        window.location.href = '#/login?redirect_url=' + window.location.href
     }
 }, function (error) {
     // 对响应错误做点什么
