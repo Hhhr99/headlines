@@ -15,7 +15,7 @@
             <p>{{ value.user.nickname }}</p>
             <span>时间</span>
           </div>
-          <span>回复</span>
+          <span @click="replayComment(value)">回复</span>
         </div>
         <my_comment-item v-if='value.parent'
                          :parent='value.parent'></my_comment-item>
@@ -24,7 +24,7 @@
     </div>
     <!-- 底部评论块 -->
     <my_comment-footer :post='article'
-                       @refresh='refresh'></my_comment-footer>
+                       @refresh='refresh' :comment-obj="temp" @cancel="temp=null"></my_comment-footer>
   </div>
 </template>
 
@@ -44,7 +44,8 @@ export default {
   data() {
     return {
       commentList: [], axios,
-      article: {}
+      article: {},
+      temp: {}
     }
   },
   async mounted() {
@@ -64,6 +65,10 @@ export default {
       this.init()
       // 让列表自动的滚动到顶部
       window.scrollTo(0, 0)
+    },
+    replayComment(v) {
+      console.log('父组件中的', v);
+      this.temp = v
     }
   }
 }
