@@ -34,6 +34,11 @@ const router = new VueRouter({
             path: '/edit_profile/:id',
             component: () => import('@/views/user/edit_profile')
         },
+        {
+            name: 'postDetail',
+            path: '/postDetail/:id',
+            component: () => import('@/views/post/postDetail')
+        },
     ]
 })
 
