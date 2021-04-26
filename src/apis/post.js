@@ -33,6 +33,9 @@ export const starPost = (id) => {
 // 5.获取文章的评论数据
 export const getPostComment = (id) => {
     return axios({
-        url: '/post_comment/' + id
+        url: '/post_comment/' + id,
+        params: {
+            pageSize: 50
+        }
     })
 }

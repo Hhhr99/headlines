@@ -10,7 +10,7 @@
       </p>
     </div>
   </div>
-  
+
   <div class="single"
        v-if="post.type == 1 && post.cover.length < 3"
        @click="$router.push({path:`/postDetail/${post.id}`})">
