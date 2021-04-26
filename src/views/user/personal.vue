@@ -15,7 +15,7 @@
         <span class="iconfont iconjiantou1"></span>
       </div>
     </router-link>
-    <my_cell title="我的关注" desc="关注的用户"></my_cell>
+    <my_cell title="我的关注" desc="关注的用户" @click.native="$router.push({path:'/myfollow'})"></my_cell>
     <my_cell title="我的跟帖" desc="跟帖/回复"></my_cell>
     <my_cell title="我的收藏" desc="文章/视频"></my_cell>
     <my_cell title="设置"></my_cell>

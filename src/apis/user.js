@@ -49,3 +49,10 @@ export const unFollowUser = (id) => {
         url: `/user_unfollow/${id}`
     })
 }
+
+// 7.获取用户关注列表数据
+export const getUserFollows = () => {
+    return axios({
+        url: `/user_follows`
+    })
+}
