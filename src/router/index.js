@@ -53,6 +53,11 @@ const router = new VueRouter({
             name: 'comment',
             path: '/comment/:id',
             component: () => import('@/views/comment')
+        },
+        {
+            name: 'cateManager',
+            path: '/cateManager',
+            component: () => import('@/views/cateManager')
         }
     ]
 })

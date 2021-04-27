@@ -6,12 +6,12 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="search">
-        <van-icon name="search" />
+        <van-icon name="search"/>
         <span>搜索商品</span>
       </div>
       <div class="user">
         <van-icon name="manager-o"
-                  @click="jump" />
+                  @click="jump"/>
       </div>
     </div>
     <!-- tab标签页
@@ -37,8 +37,8 @@
                             @refresh="onRefresh">
 
             <my_post-block v-for='item in cate.postList'
-                          :key='item.id'
-                          :post='item'></my_post-block>
+                           :key='item.id'
+                           :post='item'></my_post-block>
 
           </van-pull-refresh>
 
@@ -50,11 +50,12 @@
 </template>
 
 <script>
-import { getCateList } from '@/apis/category.js'
-import { getPostList } from '@/apis/post.js'
+import {getCateList} from '@/apis/category.js'
+import {getPostList} from '@/apis/post.js'
 import My_postBlock from "@/components/my_postBlock";
+
 export default {
-  data () {
+  data() {
     return {
       // 当前被激活项的索引值:这个索引值就对应着数据在数组中的索引
       // 这个项目在打开首页之后，应该让“头条”栏目默认被选中，如果登陆了，有了关注，那么active=1，否则 active=0
@@ -66,7 +67,15 @@ export default {
   components: {
     My_postBlock,
   },
-  async mounted () {
+  async mounted() {
+    // 点击添加栏目
+    document.querySelector('.van-sticky').onclick = (e) => {
+      // console.log(e.target.className)
+      let className = e.target.className
+      if (className === 'van-sticky') {
+        this.$router.push({name: 'cateManager'})
+      }
+    }
     // 页面一加载完毕：获取栏目数据
     let res = await getCateList()
     // console.log(res.data.data);
@@ -96,20 +105,19 @@ export default {
 
   methods: {
     // 单击个人中心图标
-    jump () {
+    jump() {
       // 判断是否有id,如果有就跳转到个人中心页
       let id = localStorage.getItem('userid')
       if (id) {
-        this.$router.push({ path: `/personal/${id}` })
-      }
-      else {
+        this.$router.push({path: `/personal/${id}`})
+      } else {
         this.$toast.fail('未登陆，请先登陆')
-        this.$router.push({ path: `/login` })
+        this.$router.push({path: `/login`})
       }
       // 如果没有，则登陆
     },
     // 下拉刷新处理函数
-    onRefresh () {
+    onRefresh() {
       // 下拉刷新需要做什么
       // 1.页码重新设置为1
       this.cateList[this.active].pageIndex = 1
@@ -121,12 +129,12 @@ export default {
       this.getpost()
     },
     // 上拉加载下一页数据
-    onLoad () {
+    onLoad() {
       // 加载下一页数据：就是将当前栏目的页码+1，重新发起axios请求
       this.cateList[this.active].pageIndex++
       this.getpost()
     },
-    async getpost () {
+    async getpost() {
       // 加载默认栏目的新闻数据：关键在于获取当前栏目的id
       let current = (await getPostList({
         category: this.cateList[this.active].id, // 传递当前栏目的id
@@ -149,7 +157,7 @@ export default {
 
   watch: {
     // 单击栏目获取当前栏目的新闻数据：关键也是获取栏目id
-    active () {
+    active() {
       if (this.cateList[this.active].postList.length === 0) {
         this.getpost()
       }
@@ -167,12 +175,15 @@ export default {
     align-items: center;
     padding: 0 10px;
     background-color: #f00;
+
     .logo {
       color: #fff;
+
       .iconnew {
         font-size: 50px;
       }
     }
+
     .search {
       flex: 1;
       height: 40px;
@@ -185,10 +196,28 @@ export default {
       color: #fff;
       margin: 0 10px;
     }
+
     .user {
       color: #fff;
       font-size: 20px;
     }
+  }
+}
+
+/deep/ .van-sticky {
+  padding-right: 44px;
+
+  &::before {
+    content: "+";
+    width: 51px;
+    height: 42px;
+    position: absolute;
+    top: 0;
+    right: 7px;
+    background-color: #fff;
+    line-height: 42px;
+    text-align: center;
+    font-size: 35px;
   }
 }
 </style>
