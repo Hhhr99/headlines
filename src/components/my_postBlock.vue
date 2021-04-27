@@ -1,15 +1,15 @@
 <template>
-  <div class="single"
-       v-if="post.cover.length== 0"
-       @click="$router.push({path:`/postDetail/${post.id}`})">
-    <div class="left">
-      <p class="content">{{ post.title }}</p>
-      <p class="info">
-        <span>{{ post.user.nickname }}</span>
-        <span>{{ post.comment_length }}跟帖</span>
-      </p>
-    </div>
-  </div>
+<!--  <div class="single"-->
+<!--       v-if="post.cover.length== 0"-->
+<!--       @click="$router.push({path:`/postDetail/${post.id}`})">-->
+<!--    <div class="left">-->
+<!--      <p class="content">{{ post.title }}</p>-->
+<!--      <p class="info">-->
+<!--        <span>{{ post.user.nickname }}</span>-->
+<!--        <span>{{ post.comment_length }}跟帖</span>-->
+<!--      </p>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <div class="single"
        v-if="post.type == 1 && post.cover.length < 3"
