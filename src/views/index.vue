@@ -7,7 +7,7 @@
       </div>
       <div class="search">
         <van-icon name="search"/>
-        <span>搜索商品</span>
+        <span @click="$router.push({name:'search'})">搜索商品</span>
       </div>
       <div class="user">
         <van-icon name="manager-o"
@@ -70,9 +70,9 @@ export default {
   async mounted() {
     // 点击添加栏目
     document.querySelector('.van-sticky').onclick = (e) => {
-      // console.log(e.target.className)
+      console.log(e.target.className)
       let className = e.target.className
-      if (className === 'van-sticky') {
+      if (className.indexOf('van-sticky') !== -1) {
         this.$router.push({name: 'cateManager'})
       }
     }

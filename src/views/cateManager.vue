@@ -40,8 +40,8 @@ export default {
   },
   async mounted() {
     // 先读取已经本地 已存储的数组
-    this.cateList = JSON.parse(localStorage.getItem('cateList') || '[]')
-    if (this.cateList.length === 0) {
+    this.cateList = JSON.parse(localStorage.getItem('cateList'))
+    if (!this.cateList) {
       let res = await getCateList()
       console.log(res)
       this.cateList = res.data.data

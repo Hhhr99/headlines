@@ -55,9 +55,9 @@ const router = new VueRouter({
             component: () => import('@/views/comment')
         },
         {
-            name: 'cateManager',
-            path: '/cateManager',
-            component: () => import('@/views/cateManager')
+            name: 'search',
+            path: '/search',
+            component: () => import('@/views/search.vue')
         }
     ]
 })
