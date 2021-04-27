@@ -18,7 +18,7 @@
           <span @click="replayComment(value)">回复</span>
         </div>
         <my_comment-item v-if='value.parent'
-                         :parent='value.parent'></my_comment-item>
+                         :parent='value.parent' @replay="replayComment"></my_comment-item>
         <div class="text">{{ value.content }}</div>
       </div>
     </div>
@@ -45,7 +45,7 @@ export default {
     return {
       commentList: [], axios,
       article: {},
-      temp: {}
+      temp: {} // 评论业务的中间变量
     }
   },
   async mounted() {

@@ -1,15 +1,15 @@
 <template>
   <div class="commentItem">
     <commentItem v-if='parent.parent'
-                 :parent='parent.parent'></commentItem>
+                 :parent='parent.parent' @replay="replayComment"></commentItem>
     <div class="top">
       <div class="left">
-        <span>{{parent.user.nickname}}</span> &nbsp;&nbsp;&nbsp;
+        <span>{{ parent.user.nickname }}</span> &nbsp;&nbsp;&nbsp;
         <span>2分钟前</span>
       </div>
-      <span>回复</span>
+      <span @click="replayComment(parent)">回复</span>
     </div>
-    <div class="bottom">{{parent.content}}</div>
+    <div class="bottom">{{ parent.content }}</div>
   </div>
 </template>
 
@@ -21,6 +21,12 @@ export default {
     parent: {
       type: Object
     }
+  },
+  methods: {
+    replayComment(v) {
+      // 实现子传父
+      this.$emit('replay', v)
+    }
   }
 }
 </script>
@@ -30,12 +36,14 @@ export default {
   border: 1px solid #ccc;
   padding: 5px;
   margin-top: 10px;
+
   .top {
     font-size: 12px;
     color: #aaa;
     display: flex;
     justify-content: space-between;
   }
+
   .bottom {
     font-size: 13px;
     line-height: 40px;
