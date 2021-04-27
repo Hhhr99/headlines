@@ -76,11 +76,21 @@ export default {
         this.$router.push({name: 'cateManager'})
       }
     }
-    // 页面一加载完毕：获取栏目数据
-    let res = await getCateList()
-    // console.log(res.data.data);
-    // 这个数据现在只有 id  name  is_top，并没有存储新闻数据的数组
-    this.cateList = res.data.data
+    // // 首页加载之后，先读取本地存储中的栏目数据--加载用户定制数据
+    this.cateList = JSON.parse(localStorage.getItem('cateList') || '[]')
+    if (this.cateList.length === 0) {
+      // 页面一加载完毕：获取栏目数据
+      let res = await getCateList()
+      console.log(res)
+      // 这个数据现在只有 id  name  is_top，并没有存储新闻数据的数组
+      this.cateList = res.data.data
+    } else {
+      if (localStorage.getItem('token')) {
+        this.cateList.unshift({id: 0, name: '关注', is_top: 1}, {id: 999, name: '头条', is_top: 1})
+      } else {
+        this.cateList.unshift({id: 999, name: '头条', is_top: 1})
+      }
+    }
 
     // 数据改造：为每个栏目添加一个数组用于存储这个栏目自己的新闻数据
     this.cateList = this.cateList.map(v => {

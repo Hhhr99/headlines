@@ -65,8 +65,9 @@ const router = new VueRouter({
 import {Toast} from "vant";
 // 导航守卫
 router.beforeEach((to, from, next) => {
+    let arr = ['cateManager', 'personal', 'edit_profile']
     // console.log(to)
-    if (to.path.indexOf('/personal/') !== -1) {
+    if (arr.indexOf(to.name) !== -1) {
         // 验证是否登录
         let token = localStorage.getItem('token')
         if (token) {
