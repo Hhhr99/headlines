@@ -56,6 +56,9 @@ export default {
       this.userKey = item
       this.onSearch()
     }
+  },
+  mounted() {
+    this.historyList = JSON.parse(localStorage.getItem('search', JSON.stringify(this.historyList)) || [])
   }
 }
 </script>
